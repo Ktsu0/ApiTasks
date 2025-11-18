@@ -1,7 +1,7 @@
 // Representação dos cargos
 export enum Cargo {
   Dev = 'DEV',
-  Design = 'DESING',
+  Design = 'DESIGN',
   Gerente = 'GERENTE',
   PO = 'PO',
   Marketing = 'MARKETING',
@@ -9,8 +9,8 @@ export enum Cargo {
 
 // Estrutura do usuário
 export interface User {
-  nome: string;
+  name: string;
   email: string;
   password: string;
-  cargo: Cargo;
+  role: Cargo;
 }

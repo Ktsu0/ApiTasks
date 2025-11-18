@@ -7,16 +7,21 @@ import { tasks } from './model/tasksBD';
 export class TasksService {
   // Retorna todas as tarefas de um cargo específico
   getTasksForCargo(cargo: string): TaskBD[] {
-    return tasks.filter((task) => task.cargo === cargo);
+    // Converte para lowercase para evitar problemas de case
+    return tasks.filter(
+      (task) => task.cargo.toLowerCase() === cargo.toLowerCase(),
+    );
   }
 
-  // Atualiza o status "done" de uma tarefa
-  updateTaskStatus(title: string, cargo: string, done: boolean) {
-    const task = tasks.find((t) => t.title === title && t.cargo === cargo);
+  // Atualiza o status "done" de uma tarefa pelo ID e cargo
+  updateTaskStatus(id: number, cargo: string, done: boolean): TaskBD {
+    const task = tasks.find(
+      (t) => t.id === id && t.cargo.toLowerCase() === cargo.toLowerCase(),
+    );
 
     if (!task) {
       throw new NotFoundException(
-        `Tarefa "${title}" para o cargo "${cargo}" não encontrada.`,
+        `Tarefa com ID "${id}" para o cargo "${cargo}" não encontrada.`,
       );
     }
 

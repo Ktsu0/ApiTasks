@@ -5,7 +5,7 @@ export class CreateUserDto {
   // Nome do Usuario
   @IsNotEmpty()
   @MinLength(3)
-  nome: string;
+  name: string;
 
   // Email valido
   @IsEmail()
@@ -18,5 +18,5 @@ export class CreateUserDto {
 
   // Cargo do usuário
   @IsEnum(Cargo)
-  cargo: Cargo;
+  role: Cargo;
 }

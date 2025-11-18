@@ -19,7 +19,7 @@ export class AuthService {
   private users: User[] = [];
 
   private createPayload(user: User) {
-    return { email: user.email, nome: user.nome, cargo: user.cargo };
+    return { email: user.email, name: user.name, role: user.role };
   }
 
   private sanitizeUser(user: User) {

@@ -1,11 +1,12 @@
-// src/tasks/tasks.controller.ts
 import {
   Get,
-  Body,
   Patch,
+  Param,
+  Body,
   Request,
   UseGuards,
   Controller,
+  NotFoundException,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
@@ -14,23 +15,48 @@ import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
+  // GET /tasks
   @UseGuards(JwtAuthGuard)
   @Get()
   getTasks(@Request() req) {
     const userCargo = req.user.cargo;
+    console.log('Usuário logado cargo:', userCargo);
+
     const tasks = this.tasksService.getTasksForCargo(userCargo);
-    return { tasks };
+
+    const mappedTasks = tasks.map((task) => ({
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      feito: task.done,
+      cargo: task.cargo,
+    }));
+
+    console.log('Tarefas retornadas:', mappedTasks);
+
+    return mappedTasks; // Retorna direto o array
   }
 
+  // PATCH /tasks/:id
   @UseGuards(JwtAuthGuard)
-  @Patch()
-  updateTask(@Request() req, @Body() body: { title: string; done: boolean }) {
+  @Patch(':id')
+  updateTask(
+    @Param('id') id: string,
+    @Body('feito') feito: boolean,
+    @Request() req,
+  ) {
     const userCargo = req.user.cargo;
-    const updatedTask = this.tasksService.updateTaskStatus(
-      body.title,
-      userCargo,
-      body.done,
-    );
-    return { task: updatedTask };
+    const taskId = parseInt(id, 10);
+
+    try {
+      const updatedTask = this.tasksService.updateTaskStatus(
+        taskId,
+        userCargo,
+        feito,
+      );
+      return { ...updatedTask, feito: updatedTask.done };
+    } catch (err) {
+      throw new NotFoundException(err.message);
+    }
   }
 }

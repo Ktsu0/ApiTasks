@@ -1,4 +1,5 @@
 export interface TaskBD {
+  id: number;
   title: string; // Título da tarefa
   description: string; // Descrição detalhada
   done: boolean; // Se a tarefa foi concluída ou não
