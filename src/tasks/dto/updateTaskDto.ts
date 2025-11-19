@@ -1,4 +1,3 @@
-// src/tasks/dto/updateTask.dto.ts
 import { IsBoolean } from 'class-validator';
 
 export class UpdateTaskDto {

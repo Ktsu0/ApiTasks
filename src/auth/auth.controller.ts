@@ -25,7 +25,7 @@ export class AuthController {
   private sendToken(res: Response, token: string, user: any, message: string) {
     res.cookie('auth_token', token, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'lax',
       maxAge: 1000 * 60 * 15, // 15 minutos
       path: '/',

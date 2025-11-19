@@ -1,6 +1,6 @@
 import {
   Get,
-  Patch,
+  Put,
   Param,
   Body,
   Request,
@@ -20,7 +20,10 @@ export class TasksController {
   @Get()
   getTasks(@Request() req) {
     const userCargo = req.user.cargo;
-    console.log('Usuário logado cargo:', userCargo);
+
+    console.log(
+      `[TasksController] Buscando tarefas para o cargo: ${userCargo}`,
+    );
 
     const tasks = this.tasksService.getTasksForCargo(userCargo);
 
@@ -37,9 +40,9 @@ export class TasksController {
     return mappedTasks; // Retorna direto o array
   }
 
-  // PATCH /tasks/:id
+  // PUT /tasks/:id
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
+  @Put(':id')
   updateTask(
     @Param('id') id: string,
     @Body('feito') feito: boolean,
